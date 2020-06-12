@@ -1,4 +1,4 @@
-# Proxy Test
+# Proxy Test Tool
 
 ## Deploy
 ```shell
