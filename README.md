@@ -8,7 +8,7 @@
 ## Run 
 ```shell
 cd build/libs
-java -jar proxy-test.jar https://www.example.com
+java -jar proxy-test.jar -h your.proxy.server -p 3128 -t https://example.com
 ```
 
 ## Options

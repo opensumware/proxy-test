@@ -2,6 +2,8 @@ buildscript {
     ext { 
 	      log4jVersion = '1.2.7'
 		  httpClientVersion = '4.5.2'
+          apacheCommonsVersion = '3.2'
+          jCommanderVersion = '1.47'
 		 }
 		repositories {
 			mavenCentral()
@@ -79,10 +81,10 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version:"${httpClientVersion}"
     
     // Apache Commons
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.2'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: "${apacheCommonsVersion}"
 
     //JCommander
-    compile group: 'com.beust', name: 'jcommander', version: '1.47'	
+    compile group: 'com.beust', name: 'jcommander', version: "${jCommanderVersion}"	
 }
 
 
