@@ -1,0 +1,97 @@
+buildscript {
+    ext { 
+	      log4jVersion = '1.2.7'
+		  httpClientVersion = '4.5.2'
+		 }
+		repositories {
+			mavenCentral()
+			jcenter()
+		}
+		dependencies {
+        	classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
+    	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group = 'br.com.sumware.proxy'
+
+sourceCompatibility = 1.6
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
+
+def javaExecutablesPath = new File(java6Home, 'bin')
+def javaExecutables = [:].withDefault { execName ->
+    def executable = new File(javaExecutablesPath, execName)
+    assert executable.exists() : "There is no ${execName} executable in ${javaExecutablesPath}"
+    executable
+}
+tasks.withType(AbstractCompile) {
+    options.with {
+        fork = true
+        forkOptions.javaHome = file(java6Home)
+    }
+}
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
+}
+
+tasks.withType(Javadoc) {
+    executable = javaExecutables.javadoc
+}
+
+tasks.withType(Test) {
+    executable = javaExecutables.java
+    systemProperty "file.encoding", "UTF-8"
+}
+
+tasks.withType(JavaExec) {
+    executable = javaExecutables.java
+}
+
+jar {
+    baseName = 'proxy-test'
+    version =  '1.0'
+    manifest {
+        attributes 'Main-Class': 'br.com.sumware.proxy.ProxyTest'
+    }
+}
+
+ shadowJar {
+   baseName = 'proxy'
+   classifier = null
+   version = 'test'
+}
+
+repositories {		
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    // Log4J
+    compile group: 'log4j', name: 'log4j', version: "${log4jVersion}"
+    
+    // HTTP Client
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version:"${httpClientVersion}"
+    
+    // Apache Commons
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.2'
+
+    //JCommander
+    compile group: 'com.beust', name: 'jcommander', version: '1.47'	
+}
+
+
+task compileOne (type: JavaCompile) {
+    source = fileTree(dir: 'src', include: '**/*.java')
+    classpath = files('build/classes/main')
+    destinationDir = file('build/classes/main')
+    sourceCompatibility = '1.6'
+    targetCompatibility = '1.6'
+}
+
+compileOne.options.compilerArgs = ["-sourcepath", "$projectDir/src/main/java"]
