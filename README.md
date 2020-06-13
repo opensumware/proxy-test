@@ -34,4 +34,3 @@ java -jar proxy-test.jar -h your.proxy.server -p 3128 -t https://example.com
        Proxy Password   
 ###  * -t
        Target URL to test
-
