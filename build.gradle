@@ -18,41 +18,14 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
 apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'jacoco'
 
 group = 'br.com.sumware.proxy'
 
 sourceCompatibility = 1.6
+
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
-
-def javaExecutablesPath = new File(java6Home, 'bin')
-def javaExecutables = [:].withDefault { execName ->
-    def executable = new File(javaExecutablesPath, execName)
-    assert executable.exists() : "There is no ${execName} executable in ${javaExecutablesPath}"
-    executable
-}
-tasks.withType(AbstractCompile) {
-    options.with {
-        fork = true
-        forkOptions.javaHome = file(java6Home)
-    }
-}
-tasks.withType(JavaCompile) {
-	options.encoding = "UTF-8"
-}
-
-tasks.withType(Javadoc) {
-    executable = javaExecutables.javadoc
-}
-
-tasks.withType(Test) {
-    executable = javaExecutables.java
-    systemProperty "file.encoding", "UTF-8"
-}
-
-tasks.withType(JavaExec) {
-    executable = javaExecutables.java
-}
 
 jar {
     baseName = 'proxy-test'
@@ -85,8 +58,11 @@ dependencies {
 
     //JCommander
     compile group: 'com.beust', name: 'jcommander', version: "${jCommanderVersion}"	
-}
 
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+
+}
 
 task compileOne (type: JavaCompile) {
     source = fileTree(dir: 'src', include: '**/*.java')
@@ -95,5 +71,25 @@ task compileOne (type: JavaCompile) {
     sourceCompatibility = '1.6'
     targetCompatibility = '1.6'
 }
-
 compileOne.options.compilerArgs = ["-sourcepath", "$projectDir/src/main/java"]
+
+test {
+    
+    useJUnitPlatform()
+
+    maxHeapSize = '1G'
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+    
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+            html.enabled false
+        }
+    }
+
+check.dependsOn jacocoTestReport   
+
+}
