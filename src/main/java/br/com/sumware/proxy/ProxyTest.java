@@ -88,7 +88,7 @@ public class ProxyTest {
 				return;
 			}
 
-			System.out.println("Proxy Test Tool.");
+			logger.info("Proxy Test Tool.");
 
 			main.run();
 		} catch (ParameterException e) {
@@ -121,7 +121,7 @@ public class ProxyTest {
         httpGet.addHeader("User-Agent", USER_AGENT);
         CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpGet);
 
-        System.out.println("GET Response Status:: " + httpResponse.getStatusLine().getStatusCode());
+        logger.info("GET Response Status:: " + httpResponse.getStatusLine().getStatusCode());
         httpResponse.close();
     }
 }
