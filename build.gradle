@@ -19,7 +19,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven'
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'jacoco'
-
+id "org.sonarqube" version "2.8"
 group = 'br.com.sumware.proxy'
 
 sourceCompatibility = 1.6
@@ -92,4 +92,14 @@ test {
 
 check.dependsOn jacocoTestReport   
 
+}
+
+plugins {
+  
+}
+
+sonarqube {
+  properties {
+    property "sonar.projectKey", "opensumware_proxy-test"
+  }
 }
