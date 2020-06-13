@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 package br.com.sumware.proxy;
 
 import java.io.IOException;
@@ -53,7 +52,7 @@ import org.apache.http.impl.client.ProxyAuthenticationStrategy;
 public class ProxyTest {
     private static final Log logger = LogFactory.getLog(ProxyTest.class);
     @Parameter(names = { "--disableSSL" }, description = "Disable SSL Verification", required = false)
-    private static boolean disableSSL = true;
+    private static boolean disableSSL = false;
 
     @Parameter(names = { "-u" }, description = "Proxy Username", required = false)
     private static String proxyUsername;
